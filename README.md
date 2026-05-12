@@ -22,7 +22,7 @@ Stack completo con **PostgreSQL, Express, React y Node.js** orchestrado con Dock
 ├── Dockerfile.postgres         # Dockerfile para PostgreSQL
 ├── docker-compose.yml          # Orquestación de servicios
 ├── nginx.conf                  # Configuración Nginx
-├── .env.example                # Variables de entorno
+├── .env.example                # Referencia de variables (no es necesario crear .env)
 └── .dockerignore               # Archivos a ignorar en build
 ```
 
@@ -33,13 +33,20 @@ Stack completo con **PostgreSQL, Express, React y Node.js** orchestrado con Dock
 
 ## Inicio Rápido
 
-### 1. Configurar variables de entorno
+**Cero configuración requerida.** Todos los valores por defecto están configurados en `docker-compose.yml`.
+
+Para cambiar valores (puerto, credenciales, etc.), crea un `.env` basado en `.env.example`:
 
 ```bash
 cp .env.example .env
+# Edita .env con tus valores personalizados
 ```
 
-### 2. Iniciar servicios
+Pero para empezar inmediatamente, solo necesitas:
+
+### 1. Clonar o descargar el proyecto
+
+### 2. Ejecutar
 
 ```bash
 # En background
@@ -63,9 +70,11 @@ docker-compose down -v
 
 ## Acceso a Servicios
 
-- **Frontend (React)**: http://localhost
-- **Backend (Express)**: http://localhost:5000
-- **PostgreSQL**: localhost:5432
+| Servicio | URL/Host | Puerto |
+|----------|----------|--------|
+| **Frontend (React)** | http://localhost:5173 | 5173 |
+| **Backend (Express)** | http://localhost:5000 | 5000 |
+| **PostgreSQL** | localhost | 5432 |
 
 Credenciales PostgreSQL por defecto:
 - Usuario: `pern_user`
@@ -131,25 +140,45 @@ INSERT INTO users (name, email) VALUES
 
 ## Optimizaciones Incluidas
 
-✅ **Multi-stage builds** - Optimiza el tamaño de las imágenes
-✅ **Health checks** - Monitoreo automático de servicios  
-✅ **Volumes** - Persistencia de datos en PostgreSQL
-✅ **Networking** - Comunicación segura entre servicios
-✅ **Security headers** - Headers de seguridad en Nginx
-✅ **Environment variables** - Configuración flexible
-✅ **Estructura limpia** - Solo archivos necesarios
+- Multi-stage builds - Optimiza el tamaño de las imágenes
+- Health checks - Monitoreo automático de servicios
+- Volumes - Persistencia de datos en PostgreSQL
+- Networking - Comunicación segura entre servicios
+- Security headers - Headers de seguridad en Nginx
+- Environment variables - Configuración flexible
+- Estructura limpia - Solo archivos necesarios
 
-## Variables de Entorno
+## Valores por Defecto
+
+Estos valores están automáticamente configurados en `docker-compose.yml` y los contenedores los usan de inmediato:
 
 ```
-DB_HOST=postgres             # Host de PostgreSQL
-DB_PORT=5432                 # Puerto de PostgreSQL
-DB_NAME=pern_db              # Nombre de la base de datos
-DB_USER=pern_user            # Usuario de la BD
-DB_PASSWORD=pern_password    # Contraseña de la BD
-NODE_ENV=production          # Entorno (production/development)
-API_PORT=5000                # Puerto del backend
-REACT_APP_API_URL=http://localhost:5000  # URL de la API para React
+# PostgreSQL
+POSTGRES_DB=pern_db
+POSTGRES_USER=pern_user
+POSTGRES_PASSWORD=pern_password
+POSTGRES_PORT=5432
+
+# Backend
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=pern_db
+DB_USER=pern_user
+DB_PASSWORD=pern_password
+NODE_ENV=production
+API_PORT=5000
+
+# Frontend
+REACT_APP_API_URL=http://backend:5000
+FRONTEND_PORT=5173
+```
+
+**Para customizarlos:** Copia `.env.example` a `.env` y edítalo antes de ejecutar `docker-compose up`.
+
+```bash
+cp .env.example .env
+# Abre .env y cambia los valores que necesites
+docker-compose up
 ```
 
 ## Troubleshooting
@@ -206,4 +235,4 @@ Para producción, considera:
 
 ---
 
-**Hecho para Docker Taller** 🐳
+**Hecho para Docker Taller**

@@ -2,13 +2,13 @@
 
 Este proyecto incluye scripts para ejecutar los 3 contenedores Docker (Backend, Frontend y PostgreSQL) en paralelo sin utilizar Docker Compose.
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 - **Docker** instalado y ejecutándose
 - **Docker CLI** disponible en la terminal
 - Acceso a privilegios de docker (en Linux/Mac podría requerir `sudo`)
 
-## 🚀 Para Windows
+## Para Windows
 
 ### Iniciar los servicios:
 ```batch
@@ -16,18 +16,18 @@ run_containers.bat
 ```
 
 Este script:
-1. ✓ Crea una red Docker personalizada (`pern_network`)
-2. ✓ Compila las 3 imágenes Docker
-3. ✓ Inicia los contenedores en paralelo
-4. ✓ Configura las variables de entorno correctas
-5. ✓ Establece health checks para cada servicio
+1. Crea una red Docker personalizada (`pern_network`)
+2. Compila las 3 imágenes Docker
+3. Inicia los contenedores en paralelo
+4. Configura las variables de entorno correctas
+5. Establece health checks para cada servicio
 
 ### Detener los servicios:
 ```batch
 stop_containers.bat
 ```
 
-## 🐧 Para Linux/Mac
+## Para Linux/Mac
 
 ### Primero, dale permisos de ejecución a los scripts:
 ```bash
@@ -45,7 +45,7 @@ chmod +x stop_containers.sh
 ./stop_containers.sh
 ```
 
-## 📍 URLs de Acceso
+## URLs de Acceso
 
 Una vez que todo esté corriendo:
 
@@ -55,7 +55,7 @@ Una vez que todo esté corriendo:
 | **Backend API** | http://localhost:5000 | 5000 |
 | **PostgreSQL** | localhost:5432 | 5432 |
 
-## 🔧 Variables de Entorno
+## Variables de Entorno
 
 ### Backend
 ```
