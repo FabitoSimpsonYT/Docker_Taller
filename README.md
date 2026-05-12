@@ -1,21 +1,29 @@
-# Stack PERN con MariaDB - Docker
+# Stack PERN con PostgreSQL - Docker By Fabián Mora
 
-Este proyecto proporciona una configuración completa de Docker para un stack PERN (PostgreSQL → MariaDB, Express, React, Node.js).
+Stack completo con **PostgreSQL, Express, React y Node.js** orchestrado con Docker Compose.
 
 ## Estructura del Proyecto
 
 ```
 .
-├── Dockerfile.backend          # Dockerfile para Node.js/Express
+├── backend/                    # API Node.js/Express
+│   ├── package.json
+│   ├── server.js
+│   └── ...
+├── frontend/                   # Aplicación React
+│   ├── package.json
+│   ├── public/
+│   ├── src/
+│   └── ...
+├── scripts/                    # Scripts SQL de inicialización
+│   └── init.sql
+├── Dockerfile.backend          # Dockerfile para Express
 ├── Dockerfile.frontend         # Dockerfile para React
+├── Dockerfile.postgres         # Dockerfile para PostgreSQL
 ├── docker-compose.yml          # Orquestación de servicios
-├── nginx.conf                  # Configuración de Nginx
-├── .dockerignore              # Archivos a ignorar en build
-├── .env.example               # Variables de entorno de ejemplo
-├── package.backend.json       # Dependencias backend
-├── package.frontend.json      # Dependencias frontend
-├── server.example.js          # Servidor Express de ejemplo
-└── scripts/                   # Scripts SQL de inicialización
+├── nginx.conf                  # Configuración Nginx
+├── .env.example                # Variables de entorno
+└── .dockerignore               # Archivos a ignorar en build
 ```
 
 ## Requisitos
@@ -23,80 +31,74 @@ Este proyecto proporciona una configuración completa de Docker para un stack PE
 - Docker (v20.10+)
 - Docker Compose (v2.0+)
 
-## Estructura de Carpetas Necesaria
+## Inicio Rápido
 
-```
-Docker_Taller/
-├── backend/
-│   ├── package.json
-│   ├── server.js
-│   └── node_modules/
-├── frontend/
-│   ├── package.json
-│   ├── public/
-│   ├── src/
-│   └── node_modules/
-└── scripts/
-    └── init.sql (opcional)
-```
-
-## Configuración Rápida
-
-### 1. Preparar el proyecto
-
-```bash
-# Clonar o crear la estructura de carpetas
-mkdir -p backend frontend scripts
-
-# Copiar los archivos de ejemplo
-cp package.backend.json backend/package.json
-cp package.frontend.json frontend/package.json
-cp server.example.js backend/server.js
-```
-
-### 2. Crear archivo de variables de entorno
+### 1. Configurar variables de entorno
 
 ```bash
 cp .env.example .env
 ```
 
-### 3. Iniciar los servicios
+### 2. Iniciar servicios
 
 ```bash
-# Construcción e inicio en background
+# En background
 docker-compose up -d
 
-# O con logs en tiempo real
+# Con logs en tiempo real
 docker-compose up
 
-# Construcción y inicio sin caché
+# Reconstruir imágenes
 docker-compose up --build
 ```
 
-## Acceso a los Servicios
+### 3. Detener servicios
 
-- **Frontend (React)**: http://localhost:80
+```bash
+docker-compose down
+
+# Eliminar también volúmenes de datos
+docker-compose down -v
+```
+
+## Acceso a Servicios
+
+- **Frontend (React)**: http://localhost
 - **Backend (Express)**: http://localhost:5000
-- **MariaDB**: localhost:3306
+- **PostgreSQL**: localhost:5432
 
-Credenciales MariaDB por defecto:
+Credenciales PostgreSQL por defecto:
 - Usuario: `pern_user`
 - Contraseña: `pern_password`
 - Base de datos: `pern_db`
-- Root password: `root_password`
 
 ## Comandos Útiles
 
-### Ver estado de los contenedores
+### Estado de contenedores
 ```bash
 docker-compose ps
 ```
 
-### Ver logs en tiempo real
+### Logs en tiempo real
 ```bash
 docker-compose logs -f backend
 docker-compose logs -f frontend
-docker-compose logs -f mariadb
+docker-compose logs -f postgres
+```
+
+### Acceder a PostgreSQL
+```bash
+docker-compose exec postgres psql -U pern_user -d pern_db
+```
+
+### Detener contenedor específico
+```bash
+docker-compose stop backend
+```
+
+### Reiniciar
+```bash
+docker-compose restart
 ```
 
 ### Ejecutar comando en un contenedor
@@ -105,31 +107,19 @@ docker-compose exec backend npm install
 docker-compose exec frontend npm install
 ```
 
-### Entrar a la base de datos
+### Acceder a PostgreSQL
 ```bash
-docker-compose exec mariadb mysql -u pern_user -p pern_db
-```
-
-### Detener servicios
-```bash
-docker-compose stop
-```
-
-### Eliminar todo
-```bash
-docker-compose down -v  # -v elimina también los volúmenes
+docker-compose exec postgres psql -U pern_user -d pern_db
 ```
 
 ## Scripts de Inicialización SQL
 
-Coloca archivos `.sql` en la carpeta `scripts/` para ejecutarlos automáticamente al iniciar MariaDB.
+Coloca archivos `.sql` en la carpeta `scripts/` para ejecutarlos automáticamente al iniciar PostgreSQL.
 
 Ejemplo `scripts/init.sql`:
 ```sql
-USE pern_db;
-
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -142,17 +132,18 @@ INSERT INTO users (name, email) VALUES
 ## Optimizaciones Incluidas
 
 ✅ **Multi-stage builds** - Optimiza el tamaño de las imágenes
-✅ **Health checks** - Monitoreo automático de servicios
-✅ **Volumes** - Persistencia de datos en MariaDB
+✅ **Health checks** - Monitoreo automático de servicios  
+✅ **Volumes** - Persistencia de datos en PostgreSQL
 ✅ **Networking** - Comunicación segura entre servicios
 ✅ **Security headers** - Headers de seguridad en Nginx
 ✅ **Environment variables** - Configuración flexible
+✅ **Estructura limpia** - Solo archivos necesarios
 
 ## Variables de Entorno
 
 ```
-DB_HOST=mariadb              # Host de MariaDB
-DB_PORT=3306                 # Puerto de MariaDB
+DB_HOST=postgres             # Host de PostgreSQL
+DB_PORT=5432                 # Puerto de PostgreSQL
 DB_NAME=pern_db              # Nombre de la base de datos
 DB_USER=pern_user            # Usuario de la BD
 DB_PASSWORD=pern_password    # Contraseña de la BD
@@ -173,13 +164,14 @@ docker-compose up --build
 Cambia los puertos en `docker-compose.yml`:
 ```yaml
 ports:
-  - "3307:3306"  # Cambiar primer número
-  - "5001:5000"  # Cambiar primer número
+  - "5433:5432"  # PostgreSQL en puerto distinto
+  - "5001:5000"  # Backend en puerto distinto
 ```
 
 ### Ver logs de error
 ```bash
 docker-compose logs --tail=100 backend
+docker-compose logs --tail=100 postgres
 ```
 
 ## Desarrollo Local
@@ -196,6 +188,7 @@ npm run dev
 cd frontend
 npm install
 npm start
+```
 
 # MariaDB con tu cliente preferido
 ```

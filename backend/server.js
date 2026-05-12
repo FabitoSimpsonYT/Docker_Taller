@@ -12,15 +12,15 @@ const PORT = process.env.API_PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Configurar Sequelize para MariaDB
+// Configurar Sequelize para PostgreSQL
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'pern_db',
   process.env.DB_USER || 'pern_user',
   process.env.DB_PASSWORD || 'pern_password',
   {
     host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
-    dialect: 'mysql',
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
     logging: false,
     pool: {
       max: 5,
@@ -45,9 +45,9 @@ app.get('/api/test', (req, res) => {
 async function testDataBase() {
   try {
     await sequelize.authenticate();
-    console.log('✓ Conexión a MariaDB establecida correctamente');
+    console.log('✓ Conexión a PostgreSQL establecida correctamente');
   } catch (error) {
-    console.error('✗ Error al conectar a MariaDB:', error.message);
+    console.error('✗ Error al conectar a PostgreSQL:', error.message);
     process.exit(1);
   }
 }
