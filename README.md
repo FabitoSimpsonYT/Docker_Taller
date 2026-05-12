@@ -70,9 +70,11 @@ docker-compose down -v
 
 ## Acceso a Servicios
 
-- **Frontend (React)**: http://localhost
-- **Backend (Express)**: http://localhost:5000
-- **PostgreSQL**: localhost:5432
+| Servicio | URL/Host | Puerto |
+|----------|----------|--------|
+| **Frontend (React)** | http://localhost:5173 | 5173 |
+| **Backend (Express)** | http://localhost:5000 | 5000 |
+| **PostgreSQL** | localhost | 5432 |
 
 Credenciales PostgreSQL por defecto:
 - Usuario: `pern_user`
