@@ -6,8 +6,8 @@ ENV POSTGRES_DB=pern_db
 ENV POSTGRES_USER=pern_user
 ENV POSTGRES_PASSWORD=pern_password
 
-# Copiar scripts de inicialización
-COPY scripts/ /docker-entrypoint-initdb.d/
+# Copiar scripts de inicialización (cuando está dentro de scripts/)
+COPY init.sql /docker-entrypoint-initdb.d/
 
 # Exponer puerto
 EXPOSE 5432
