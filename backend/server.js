@@ -45,9 +45,9 @@ app.get('/api/test', (req, res) => {
 async function testDataBase() {
   try {
     await sequelize.authenticate();
-    console.log('✓ Conexión a PostgreSQL establecida correctamente');
+    console.log('Conexión a PostgreSQL establecida correctamente');
   } catch (error) {
-    console.error('✗ Error al conectar a PostgreSQL:', error.message);
+    console.error('Error al conectar a PostgreSQL:', error.message);
     process.exit(1);
   }
 }
@@ -58,7 +58,7 @@ async function startServer() {
     await testDataBase();
     
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor running en puerto ${PORT}`);
+      console.log(`Servidor running en puerto ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
