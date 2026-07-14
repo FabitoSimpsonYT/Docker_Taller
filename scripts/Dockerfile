@@ -1,20 +1,18 @@
-# PostgreSQL Database
-FROM postgres:16-alpine
+# MariaDB Database
+FROM mariadb:10.11
 
-# Establecer variables de entorno
-ENV POSTGRES_DB=pern_db
-ENV POSTGRES_USER=pern_user
-ENV POSTGRES_PASSWORD=pern_password
+# Establecer variables de entorno por defecto
+ENV MARIADB_DATABASE=taller_db
+ENV MARIADB_USER=taller_user
+ENV MARIADB_PASSWORD=taller_password
+ENV MARIADB_ROOT_PASSWORD=root_root_password
 
-# Copiar scripts de inicialización (cuando está dentro de scripts/)
+# Copiar scripts de inicialización
 COPY init.sql /docker-entrypoint-initdb.d/
 
 # Exponer puerto
-EXPOSE 5432
+EXPOSE 3306
 
-# Health check
+# Health check usando mariadb-admin ping
 HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=5 \
-  CMD pg_isready -U $POSTGRES_USER -d $POSTGRES_DB || exit 1
-
-# Comando por defecto (postgres)
-CMD ["postgres"]
+  CMD mariadb-admin ping -h localhost || exit 1
